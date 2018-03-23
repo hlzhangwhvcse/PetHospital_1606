@@ -68,11 +68,12 @@ public class UserDAO
             if(rs.next()){//如果if为true  表示找到了记录  此时才需要进行User对象的初始化(new User())以及 数据封装(setXxx)
                 user=new User();
                 user.setAddress(rs.getString("address"));;
-                user.setId(rs.getInt("id"));
+//                user.setId(rs.getInt("id"));
                 user.setName(rs.getString("name"));
                 user.setPwd(rs.getString("pwd"));
                 user.setRole(rs.getString("role"));
                 user.setTel(rs.getString("tel"));
+                user.setId(rs.getInt("id"));
             }
 
         }catch(ClassNotFoundException e){
