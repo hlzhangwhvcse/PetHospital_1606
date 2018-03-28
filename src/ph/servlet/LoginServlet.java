@@ -19,14 +19,14 @@ public class LoginServlet extends javax.servlet.http.HttpServlet
         try{
             /* 0.取出表单中的用户提交数据 */
             String username=request.getParameter("username");
-            System.out.println(username);
+//            System.out.println(username);
             String pwd=request.getParameter("pwd");
             String usercode=request.getParameter("usercode");//用户输入的验证码
 
             //1.验证验证码
             String realcode=(String) request.getSession(true).getAttribute("realcode");//session中的验证码
-//            if(!realcode.equalsIgnoreCase(usercode))//如果两个验证码不一致
-            if(false)
+            if(!realcode.equalsIgnoreCase(usercode))//如果两个验证码不一致
+//            if(false)
             {
                 request.setAttribute("msg", "验证码输入错误");
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
