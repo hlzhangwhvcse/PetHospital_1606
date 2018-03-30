@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//import ph.po.Speciality;
+import ph.po.Speciality;
 import ph.po.Vet;
 
 public class VetDAO
@@ -37,9 +37,14 @@ public class VetDAO
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph", "root", "123456");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph", "root", "root");
             // 1.找符合条件的医生
-            String sql = "SELECT distinct t_vet.* FROM db_ph.t_vet_speciality INNER JOIN db_ph.t_vet ON (t_vet_speciality.vetId = t_vet.id) INNER JOIN db_ph.t_speciality ON (t_vet_speciality.specId = t_speciality.id) where t_vet.name like ? and t_speciality.name like ?";
+//            String sql = "SELECT distinct t_vet.* FROM db_ph.t_vet_speciality INNER JOIN db_ph.t_vet ON (t_vet_speciality.vetId = t_vet.id) INNER JOIN db_ph.t_speciality ON (t_vet_speciality.specId = t_speciality.id) where t_vet.name like ? and t_speciality.name like ?";
+            String sql = "select t_vet.*\n" +
+                    "from t_vet, t_speciality, t_vet_speciality\n" +
+                    "where t_vet.id = t_vet_speciality.vetId and\n" +
+                    "      t_speciality.id = t_vet_speciality.specId and\n" +
+                    "      t_vet.name like ? and t_speciality.name like ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, "%" + vname + "%");
             ps.setString(2, "%" + sname + "%");
@@ -55,17 +60,21 @@ public class VetDAO
             // 2.循环上面找到的医生，根据医生id为每一个医生封装专业集合==>有vetid 要找所有关联的speciality
             for (Vet v : vets)
             {
-                sql = "SELECT t_speciality.* FROM    db_ph.t_vet_speciality    INNER JOIN db_ph.t_speciality         ON (t_vet_speciality.specId = t_speciality.id) where t_vet_speciality.vetId=?";
+//                sql = "SELECT t_speciality.* FROM    db_ph.t_vet_speciality    INNER JOIN db_ph.t_speciality         ON (t_vet_speciality.specId = t_speciality.id) where t_vet_speciality.vetId=?";
+                sql = "select t_speciality.*\n" +
+                        "from t_speciality,  t_vet_speciality\n" +
+                        "where t_vet_speciality.specId = t_speciality.id AND\n" +
+                        "      t_vet_speciality.vetId=?";
                 ps = con.prepareStatement(sql);
                 ps.setInt(1, v.getId());
                 rs = ps.executeQuery();
-//                while (rs.next())
-////                {
-////                    Speciality s = new Speciality();// 这里查找的是t_speciality.* 所以使用Speciality封装
-////                    s.setId(rs.getInt("id"));
-////                    s.setName(rs.getString("name"));
-////                    v.getSpecs().add(s);
-////                }
+                while (rs.next())
+                {
+                    Speciality s = new Speciality();// 这里查找的是t_speciality.* 所以使用Speciality封装
+                    s.setId(rs.getInt("id"));
+                    s.setName(rs.getString("name"));
+                    v.getSpecs().add(s);
+                }
             }
 
         }

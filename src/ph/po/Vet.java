@@ -7,7 +7,7 @@ public class Vet
 {
     private int id;
     private String name;
-//    private List<Speciality> specs = new ArrayList<Speciality>();
+    private List<Speciality> specs = new ArrayList<Speciality>();
     public int getId()
     {
         return id;
@@ -24,12 +24,12 @@ public class Vet
     {
         this.name = name;
     }
-//    public List<Speciality> getSpecs()
-//    {
-//        return specs;
-//    }
-//    public void setSpecs(List<Speciality> specs)
-//    {
-//        this.specs = specs;
-//    }
+    public List<Speciality> getSpecs()
+    {
+        return specs;
+    }
+    public void setSpecs(List<Speciality> specs)
+    {
+        this.specs = specs;
+    }
 }
