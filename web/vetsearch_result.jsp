@@ -51,7 +51,7 @@
                     <%
                         for(Speciality spec:vet.getSpecs()){
                     %>
-                    <span><%=spec.getName()%></span>
+                    <span><%=spec.getName()%>;</span>
                     <%
                         }
                     %>
