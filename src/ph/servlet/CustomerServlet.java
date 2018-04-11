@@ -29,7 +29,12 @@ public class CustomerServlet extends HttpServlet
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        String mode = request.getParameter("mode");//获得传递来的mode参数，只有添加宠物成功后，才会有从PetServlet传递来的mode参数
 
+        if("delete".equals(mode))//如果mode的值等于"delete"，说明请求是来自customerserarch_result.jsp的“删除客户”链接.add by hlzhang 20180122
+        {
+            deleteCustomer(request, response);
+        }
     }
 
     private void searchCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -51,6 +56,23 @@ public class CustomerServlet extends HttpServlet
                 request.setAttribute("users", users);
                 request.getRequestDispatcher("/customersearch_result.jsp").forward(request, response);
             }
+        }
+        catch (Exception e)
+        {
+            request.setAttribute("msg", e.getMessage());
+            request.getRequestDispatcher("/customersearch.jsp").forward(request, response);
+        }
+    }
+
+    private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        try
+        {
+            int id = Integer.parseInt(request.getParameter("cid"));
+            UserDAO userDAO = new UserDAO();
+            userDAO.delete(id);
+            request.setAttribute("msg", "删除客户成功");
+            request.getRequestDispatcher("/customersearch.jsp").forward(request, response);
         }
         catch (Exception e)
         {
