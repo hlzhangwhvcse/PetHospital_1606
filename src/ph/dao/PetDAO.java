@@ -26,7 +26,7 @@ public class PetDAO
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","root");//  协议://域名(ip):端口/资源（数据库名）
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","123456");//  协议://域名(ip):端口/资源（数据库名）
             ps = con.prepareStatement("select * from t_pet where ownerId=?");
             ps.setInt(1, ownerId);
             rs = ps.executeQuery();
@@ -86,7 +86,7 @@ public class PetDAO
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph", "root", "root");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph", "root", "123456");
             // 1.找符合条件的医生
             String sql = "select t_pet.*, t_user.name from t_pet, t_user  where t_pet.ownerId=t_user.id and t_pet.name like ? and t_user.name like ?";
             ps = con.prepareStatement(sql);
@@ -133,5 +133,46 @@ public class PetDAO
         return pets;
     }
 
+
+    /**
+     * 根据petId 删除t_pet表的一行记录
+     * @param petId
+     * @return void
+     * @throws Exception
+     */
+    public void delete(int petId) throws Exception
+    {
+        Connection con = null;
+        PreparedStatement ps = null;
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","123456");//  协议://域名(ip):端口/资源（数据库名）
+            ps = con.prepareStatement("delete from t_pet where id=?");
+            ps.setInt(1, petId);
+            ps.executeUpdate();
+        }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new Exception("找不到驱动:"+e.getMessage());//异常不能在底层丢失了
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            throw new Exception("数据库操作错误:"+e.getMessage());
+        }
+        finally
+        {
+            if(ps!=null)
+            {
+                ps.close();
+            }
+            if(con!=null)
+            {
+                con.close();
+            }
+        }
+    }
 
 }
