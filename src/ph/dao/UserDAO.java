@@ -23,7 +23,7 @@ public class UserDAO
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","123456");//  协议://域名(ip):端口/资源（数据库名）
+            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","root");//  协议://域名(ip):端口/资源（数据库名）
             ps=con.prepareStatement("insert into t_user value(null,?,?,?,?,?)");
             ps.setString(1, user.getRole());
             ps.setString(2, user.getName());
@@ -61,7 +61,7 @@ public class UserDAO
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","123456");//  协议://域名(ip):端口/资源（数据库名）
+            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","root");//  协议://域名(ip):端口/资源（数据库名）
             ps=con.prepareStatement("select * from t_user where name=?");
             ps.setString(1, userName);
             rs=ps.executeQuery();
@@ -92,6 +92,12 @@ public class UserDAO
         return user;
     }
 
+
+    /**
+     * 根据参数cnamek客户姓名查找t_user表中role为customer类型的记录，如果找到记录就返回对应的封装对象User 没有就返回空集合List<User>
+     * @param cname
+     * @return
+     */
     public List<User> searchCustomer(String cname) throws Exception{
         List<User> users = new ArrayList<User>();
         Connection con = null;
@@ -100,7 +106,7 @@ public class UserDAO
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root", "123456");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root", "root");
             // 1.找符合条件的医生
             ps = con.prepareStatement("select * from t_user where name like ? and role='customer'");
             ps.setString(1, "%" + cname + "%");
@@ -154,7 +160,7 @@ public class UserDAO
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","123456");//  协议://域名(ip):端口/资源（数据库名）
+            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","root");//  协议://域名(ip):端口/资源（数据库名）
             ps=con.prepareStatement("select * from t_user where id=?");
             ps.setInt(1, id);
             rs=ps.executeQuery();
@@ -195,7 +201,7 @@ public class UserDAO
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","123456");//  协议://域名(ip):端口/资源（数据库名）
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_ph","root","root");//  协议://域名(ip):端口/资源（数据库名）
             ps = con.prepareStatement("delete from t_user where id=?");
             ps.setInt(1, usrId);
             ps.executeUpdate();
@@ -222,4 +228,16 @@ public class UserDAO
             }
         }
     }
+
+
+    /**
+     * 查找并返回t_user表中role为customer类型的所有记录，如果找到记录就返回对应的封装对象User 没有就返回空集合List<User>
+     * @param 无
+     * @return
+     */
+    public List<User> getAllCustomer() throws Exception
+    {
+        return searchCustomer("");
+    }
+
 }
