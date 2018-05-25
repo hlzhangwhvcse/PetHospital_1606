@@ -5,5 +5,5 @@
     <li><a href="vetsearch.jsp">医生管理</a></li>
     <li><a href="customersearch.jsp">客户管理</a></li>
     <li><a href="petSearch.jsp">宠物管理</a></li>
-    <li><a href="">就诊管理</a></li>
+    <li><a href="visitSearch.jsp">病历管理</a></li>
 </ul>
