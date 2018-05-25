@@ -12,9 +12,9 @@ import java.util.List;
 import ph.dao.PetDAO;
 import ph.dao.VetDAO;
 import ph.po.Pet;
-//import ph.dao.VisitDAO;
+import ph.dao.VisitDAO;
 import ph.po.Vet;
-//import ph.po.Visit;
+import ph.po.Visit;
 
 //@WebServlet(name = "VisitServlet")
 @WebServlet("/VisitServlet")
@@ -31,7 +31,11 @@ public class VisitServlet extends HttpServlet
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-
+        String mode = request.getParameter("mode");
+        if ("showCaseHistory".equals(mode))//浏览病历
+        {
+            showCaseHistory(request, response);
+        }
     }
 
     private void searchPet(HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException
@@ -60,4 +64,23 @@ public class VisitServlet extends HttpServlet
         }
     }
 
+    private void showCaseHistory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        try
+        {
+            VisitDAO visitDAO = new VisitDAO();
+            List<Visit> visits = visitDAO.getVisitsByPetId(Integer.parseInt(request.getParameter("petId")));
+            request.setAttribute("visits", visits);
+            if (0 == visits.size())
+            {
+                request.setAttribute("msg", "没有找到历史病历");
+            }
+            request.getRequestDispatcher("/showCaseHistory.jsp").forward(request, response);
+        }
+        catch (Exception e)
+        {
+            request.setAttribute("msg", e.getMessage());
+            request.getRequestDispatcher("/visitSearch.jsp").forward(request, response);
+        }
+    }
 }
